@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 2cm;
+        }
+        header {
+            text-align: center;
+            border-bottom: 2px solid black;
+            padding-bottom: 10px;
+        }
+        header img {
+            float: left;
+            width: 80px;
+        }
+        .info {
+            margin-top: 30px;
+        }
+        .info p {
+            margin: 5px 0;
+        }
+        .agent {
+            margin-top: 30px;
+            border-top: 1px dashed gray;
+            padding-top: 10px;
+        }
+        .signature {
+            margin-top: 60px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <img src="../static/logo_men.jpg" alt="Logo" />
+        <h2>RÉPUBLIQUE DE MADAGASCAR</h2>
+        <h3>MINISTÈRE XYZ</h3>
+        <h3>ORDRE DE MISSION</h3>
+    </header>
+
+    <div class="info">
+        <p><strong>Objet :</strong> {{ objet }}</p>
+        <p><strong>Lieu :</strong> {{ lieu }}</p>
+        <p><strong>Date de départ :</strong> {{ date_depart }}</p>
+        <p><strong>Durée :</strong> {{ duree }} jour(s)</p>
+        <p><strong>Transport :</strong> {{ transport }}</p>
+        <p><strong>Financement :</strong> {{ financement }}</p>
+    </div>
+
+    {% for agent in agents %}
+    <div class="agent">
+        <h4>Agent concerné :</h4>
+        <p><strong>Nom :</strong> {{ agent.nom }}</p>
+        <p><strong>Matricule :</strong> {{ agent.matricule }}</p>
+        <p><strong>Grade :</strong> {{ agent.grade }}</p>
+        <p><strong>Indice :</strong> {{ agent.indice }}</p>
+        <p><strong>Fonction :</strong> {{ agent.fonction }}</p>
+
+        <div class="signature">
+            <p><strong>Signature de l'autorité :</strong> ____________________</p>
+            <p><strong>Date :</strong> ____________________</p>
+        </div>
+    </div>
+    {% endfor %}
+</body>
+</html>
