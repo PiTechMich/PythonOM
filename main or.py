@@ -1,9 +1,18 @@
+import os
+
+# ✅ Forcer OpenGL logiciel (évite les erreurs libGL)
+os.environ["LIBGL_ALWAYS_SOFTWARE"] = "1"
+os.environ["QT_QPA_PLATFORM"] = "xcb"
+
+from PyQt5.QtCore import QCoreApplication, Qt
+# ✅ Nécessaire pour QtWebEngine
+QCoreApplication.setAttribute(Qt.AA_ShareOpenGLContexts)
+
 from PyQt5.QtWidgets import QApplication, QWidget, QVBoxLayout, QPushButton, QMessageBox, QInputDialog
+
 from personnel_ui import FenetrePersonnel
 from mission_ui import FenetreMission
-from print_mission import generer_pdf_reportlab, choisir_chemin_pdf, ouvrir_pdf
 from database import init_db
-import os
 
 class MainApp(QWidget):
     def __init__(self):
@@ -49,19 +58,18 @@ class MainApp(QWidget):
             self.fenetre_mission.activateWindow()
 
     def imprimer_mission(self):
+        from PyQt5.QtWidgets import QInputDialog, QMessageBox
+        from print_mission import generer_pdf_reportlab
+
         mission_id, ok = QInputDialog.getInt(self, "ID Mission", "Entrez l'ID de la mission :")
         if ok:
-            chemin = choisir_chemin_pdf(self)
-            if chemin:
-                generer_pdf_reportlab(mission_id, chemin)
-                ouvrir_pdf(chemin)
-            else:
-                QMessageBox.warning(self, "Annulé", "Aucun fichier sélectionné.")
+            try:
+                generer_pdf_reportlab(mission_id)
+                QMessageBox.information(self, "Succès", "PDF généré avec succès !")
+            except Exception as e:
+                QMessageBox.critical(self, "Erreur", f"Erreur lors de la génération : {e}")
 
 def main():
-    os.environ["LIBGL_ALWAYS_SOFTWARE"] = "1"
-    os.environ["QT_QPA_PLATFORM"] = "xcb"
-
     init_db()
     app = QApplication([])
     main_win = MainApp()
